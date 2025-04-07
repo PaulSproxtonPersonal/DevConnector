@@ -1,4 +1,6 @@
 {
 	"mongoURI": "mongodb+srv://sproxtonpaul:xdFH3llwKJc2ydHO@cluster0.g1iwtmo.mongodb.net/",
-	"jwtSecret": "mysecrettoken"
+	"jwtSecret": "mysecrettoken",
+	"githubClientId": "Ov23liQ9zvdZPUV5x2UM",
+	"githubSecret": "cb8831032a9c39d185e3bdd95306e39e670cdb56"
 }
