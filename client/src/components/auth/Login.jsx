@@ -1,5 +1,9 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { login, reset } from '../../features/auth/authSlice'
+import { setAlert } from '../../features/alert/alertSlice'
+import Spinner from '../layout/Spinner'
 
 const Login = () => {
 	const [formData, setFormData] = useState({
@@ -8,7 +12,29 @@ const Login = () => {
 		password: '',
 	})
 
-	const { name, email, password } = formData
+	const { email, password } = formData
+
+	const dispatch = useDispatch()
+	const navigate = useNavigate()
+
+	const { user, isLoading, isSuccess, isError, message } = useSelector((state) => state.auth)
+
+	useEffect(() => {
+		if (isError) {
+			const alertData = {
+				message,
+				type: 'danger',
+			}
+
+			dispatch(setAlert(alertData))
+		}
+
+		// Redirect when logged it
+		if (isSuccess || user) {
+			navigate('/')
+			dispatch(reset())
+		}
+	}, [isError, isSuccess, user, message, navigate, dispatch])
 
 	const onChange = (e) => {
 		setFormData({
@@ -20,7 +46,16 @@ const Login = () => {
 	const onSubmit = async (e) => {
 		e.preventDefault()
 
-		console.log('Success')
+		const userData = {
+			email,
+			password,
+		}
+
+		dispatch(login(userData))
+	}
+
+	if (isLoading) {
+		return <Spinner />
 	}
 
 	return (

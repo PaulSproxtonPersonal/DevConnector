@@ -1,10 +1,12 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { setAlert } from '../../actions/alert'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { useSelector, useDispatch } from 'react-redux'
+import { register, reset } from '../../features/auth/authSlice'
+import { setAlert } from '../../features/alert/alertSlice'
+import Spinner from '../layout/Spinner'
 
-const Register = ({ setAlert }) => {
+const Register = () => {
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
@@ -13,6 +15,28 @@ const Register = ({ setAlert }) => {
 	})
 
 	const { name, email, password, password2 } = formData
+
+	const navigate = useNavigate()
+	const dispatch = useDispatch()
+
+	const { user, isLoading, isSuccess, isError, message } = useSelector((state) => state.auth)
+
+	useEffect(() => {
+		if (isError) {
+			const alertData = {
+				message,
+				type: 'danger',
+			}
+
+			dispatch(setAlert(alertData))
+		}
+
+		// Redirect when logged it
+		if (isSuccess || user) {
+			navigate('/')
+			dispatch(reset())
+		}
+	}, [isError, isSuccess, user, message, navigate, dispatch])
 
 	const onChange = (e) => {
 		setFormData({
@@ -25,11 +49,25 @@ const Register = ({ setAlert }) => {
 		e.preventDefault()
 
 		if (password !== password2) {
-			console.log('Sending passwords dont match alert')
-			setAlert('Passwords do not match', 'danger')
+			const alertData = {
+				message: 'Passwords do not match',
+				type: 'danger',
+			}
+
+			dispatch(setAlert(alertData))
 		} else {
-			console.log('Success')
+			const userData = {
+				name,
+				email,
+				password,
+			}
+
+			dispatch(register(userData))
 		}
+	}
+
+	if (isLoading) {
+		return <Spinner />
 	}
 
 	return (
@@ -93,8 +131,4 @@ const Register = ({ setAlert }) => {
 	)
 }
 
-Register.propTypes = {
-	setAlert: PropTypes.func.isRequired,
-}
-
-export default connect(null, { setAlert })(Register)
+export default Register
