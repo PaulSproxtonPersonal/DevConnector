@@ -13,8 +13,13 @@ const setAlert = (alert) => {
 	return newAlert
 }
 
+const removeAlert = (id) => {
+	return id
+}
+
 const alertService = {
 	setAlert,
+	removeAlert,
 }
 
 export default alertService
