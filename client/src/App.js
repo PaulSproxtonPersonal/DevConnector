@@ -5,8 +5,17 @@ import Landing from './components/layout/Landing'
 import Register from './components/auth/Register'
 import Login from './components/auth/Login'
 import Alert from './components/layout/Alert'
+import { loadUser } from './features/auth/authSlice'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(loadUser())
+	}, [])
+
 	return (
 		<Router>
 			<Navbar />

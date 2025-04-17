@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux'
 
 const Alert = () => {
 	const alerts = useSelector((state) => state.alert)
-	let myDiv = null
 
 	return (
 		<div className='alert-wrapper'>

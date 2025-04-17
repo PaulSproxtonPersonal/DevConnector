@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { login, reset } from '../../features/auth/authSlice'
+import { login, loadUser, reset } from '../../features/auth/authSlice'
 import { removeAlert, setAlert } from '../../features/alert/alertSlice'
 import Spinner from '../layout/Spinner'
 
@@ -32,7 +32,7 @@ const Login = () => {
 			}, 5000)
 		}
 
-		// Redirect when logged it
+		// Redirect when logged in
 		if (isSuccess || user) {
 			navigate('/')
 			dispatch(reset())

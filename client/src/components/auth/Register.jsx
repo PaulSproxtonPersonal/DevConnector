@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
-import { register, reset } from '../../features/auth/authSlice'
-import { setAlert } from '../../features/alert/alertSlice'
+import { register, loadUser, reset } from '../../features/auth/authSlice'
+import { setAlert, removeAlert } from '../../features/alert/alertSlice'
 import Spinner from '../layout/Spinner'
 
 const Register = () => {
@@ -28,10 +28,13 @@ const Register = () => {
 				type: 'danger',
 			}
 
-			dispatch(setAlert(alertData))
+			const myAlert = dispatch(setAlert(alertData))
+			setTimeout(() => {
+				myAlert.then((val) => dispatch(removeAlert(val.payload.id)))
+			}, 5000)
 		}
 
-		// Redirect when logged it
+		// Redirect when logged in
 		if (isSuccess || user) {
 			navigate('/')
 			dispatch(reset())
