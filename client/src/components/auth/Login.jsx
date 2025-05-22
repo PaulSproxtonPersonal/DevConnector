@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { login, loadUser, reset } from '../../features/auth/authSlice'
+import { login, reset } from '../../features/auth/authSlice'
 import { removeAlert, setAlert } from '../../features/alert/alertSlice'
 import Spinner from '../layout/Spinner'
 
@@ -17,7 +17,9 @@ const Login = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const { user, isLoading, isSuccess, isError, message } = useSelector((state) => state.auth)
+	const { isAuthenticated, isLoading, isSuccess, isError, message } = useSelector(
+		(state) => state.auth
+	)
 
 	useEffect(() => {
 		if (isError) {
@@ -33,11 +35,12 @@ const Login = () => {
 		}
 
 		// Redirect when logged in
-		if (isSuccess || user) {
-			navigate('/')
+		if (isSuccess || isAuthenticated) {
+			navigate('/dashboard')
+			console.log('Calling reset from Login.jsx')
 			dispatch(reset())
 		}
-	}, [isError, isSuccess, user, message, navigate, dispatch])
+	}, [isError, isSuccess, isAuthenticated, message, navigate, dispatch])
 
 	const onChange = (e) => {
 		setFormData({

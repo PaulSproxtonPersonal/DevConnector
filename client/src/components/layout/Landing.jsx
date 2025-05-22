@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const Landing = () => {
-	const { user } = useSelector((state) => state.auth)
+	const { isAuthenticated } = useSelector((state) => state.auth)
 
 	return (
 		<section className='landing'>
@@ -12,7 +12,7 @@ const Landing = () => {
 					<p className='lead'>
 						Create a developer profile/portfolio, share posts and get help from other developers
 					</p>
-					{!user && (
+					{!isAuthenticated && (
 						<div className='buttons'>
 							<Link to='/register' className='btn btn-primary'>
 								Sign Up

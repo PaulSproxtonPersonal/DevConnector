@@ -11,6 +11,7 @@ const initialState = {
 	isError: false,
 	isSuccess: false,
 	isLoading: false,
+	isAuthenticated: false,
 	message: '',
 }
 
@@ -89,12 +90,14 @@ export const authSlice = createSlice({
 			.addCase(register.fulfilled, (state, action) => {
 				state.isLoading = false
 				state.isSuccess = true
+				state.isAuthenticated = true
 				state.user = action.payload
 			})
 			.addCase(register.rejected, (state, action) => {
 				state.isLoading = false
 				state.user = null
 				state.isError = true
+				state.isAuthenticated = false
 				state.message = action.payload
 			})
 			.addCase(login.pending, (state) => {
@@ -103,16 +106,19 @@ export const authSlice = createSlice({
 			.addCase(login.fulfilled, (state, action) => {
 				state.isLoading = false
 				state.isSuccess = true
+				state.isAuthenticated = true
 				state.user = action.payload
 			})
 			.addCase(login.rejected, (state, action) => {
 				state.isLoading = false
 				state.user = null
 				state.isError = true
+				state.isAuthenticated = false
 				state.message = action.payload
 			})
 			.addCase(logout.fulfilled, (state) => {
 				state.user = null
+				state.isAuthenticated = false
 			})
 			.addCase(loadUser.pending, (state) => {
 				state.isLoading = true
@@ -120,12 +126,14 @@ export const authSlice = createSlice({
 			.addCase(loadUser.fulfilled, (state, action) => {
 				state.isLoading = false
 				state.isSuccess = true
+				state.isAuthenticated = true
 				state.user = action.payload
 			})
 			.addCase(loadUser.rejected, (state, action) => {
 				state.isLoading = false
 				state.user = null
 				state.isError = true
+				state.isAuthenticated = false
 				state.message = action.payload
 				localStorage.removeItem('user')
 			})

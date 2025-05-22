@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
-import { register, loadUser, reset } from '../../features/auth/authSlice'
+import { register, reset } from '../../features/auth/authSlice'
 import { setAlert, removeAlert } from '../../features/alert/alertSlice'
 import Spinner from '../layout/Spinner'
 
@@ -36,7 +35,7 @@ const Register = () => {
 
 		// Redirect when logged in
 		if (isSuccess || user) {
-			navigate('/')
+			navigate('/dashboard')
 			dispatch(reset())
 		}
 	}, [isError, isSuccess, user, message, navigate, dispatch])

@@ -23,7 +23,13 @@ const register = async (userData) => {
 
 // Login user
 const login = async (userData) => {
-	const response = await axios.post(AUTH_URL, userData)
+	const config = {
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	}
+
+	const response = await axios.post(AUTH_URL, userData, config)
 	if (response.data) {
 		localStorage.setItem('user', response.data.token)
 	}
