@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { clearProfile } from '../profile/profileSlice'
 
 const USERS_URL = '/api/users'
 const AUTH_URL = '/api/auth'
@@ -52,7 +53,7 @@ const loadUser = async () => {
 
 		return response.data
 	} catch (error) {
-		console.log('Error:  ', error)
+		return null
 	}
 }
 
@@ -68,6 +69,7 @@ const setAuthToken = (token) => {
 const logout = () => {
 	localStorage.removeItem('user')
 	setAuthToken()
+	clearProfile()
 }
 
 const authService = {

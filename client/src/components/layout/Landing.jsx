@@ -1,8 +1,13 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const Landing = () => {
 	const { isAuthenticated } = useSelector((state) => state.auth)
+	const navigate = useNavigate()
+
+	if (isAuthenticated) {
+		return navigate('/dashboard')
+	}
 
 	return (
 		<section className='landing'>

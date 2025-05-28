@@ -1,8 +1,13 @@
-function Spinner() {
+import React from 'react'
+import spinner from './spinner.gif'
+
+const Spinner = () => {
 	return (
-		<div className='loadingSinnerContainer'>
-			<div className='loadingSpinner'></div>
-		</div>
+		<img
+			src={spinner}
+			style={{ width: '200px', margin: 'auto', display: 'block' }}
+			alt='Loading...'
+		/>
 	)
 }
 

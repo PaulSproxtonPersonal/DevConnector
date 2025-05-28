@@ -57,7 +57,12 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 // Load user data
 export const loadUser = createAsyncThunk('auth/loadUser', async (thunkAPI) => {
 	try {
-		return await authService.loadUser()
+		let value = await authService.loadUser()
+		if (value === null) {
+			return thunkAPI.rejectWithValue('Could not load user')
+		} else {
+			return value
+		}
 	} catch (error) {
 		const message =
 			(error.response &&
