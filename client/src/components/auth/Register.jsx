@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { register, reset } from '../../features/auth/authSlice'
-import { setAlert, removeAlert } from '../../features/alert/alertSlice'
+import { toast } from 'react-toastify'
 import Spinner from '../layout/Spinner'
 
 const Register = () => {
@@ -18,27 +18,15 @@ const Register = () => {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
-	const { user, isLoading, isSuccess, isError, message } = useSelector((state) => state.auth)
+	const { user, isLoading, isSuccess, message } = useSelector((state) => state.auth)
 
 	useEffect(() => {
-		if (isError) {
-			const alertData = {
-				message,
-				type: 'danger',
-			}
-
-			const myAlert = dispatch(setAlert(alertData))
-			setTimeout(() => {
-				myAlert.then((val) => dispatch(removeAlert(val.payload.id)))
-			}, 5000)
-		}
-
 		// Redirect when logged in
 		if (isSuccess || user) {
 			navigate('/dashboard')
 			dispatch(reset())
 		}
-	}, [isError, isSuccess, user, message, navigate, dispatch])
+	}, [isSuccess, user, message, navigate, dispatch])
 
 	const onChange = (e) => {
 		setFormData({
@@ -51,12 +39,7 @@ const Register = () => {
 		e.preventDefault()
 
 		if (password !== password2) {
-			const alertData = {
-				message: 'Passwords do not match',
-				type: 'danger',
-			}
-
-			dispatch(setAlert(alertData))
+			toast.error('Passwords do not match')
 		} else {
 			const userData = {
 				name,
