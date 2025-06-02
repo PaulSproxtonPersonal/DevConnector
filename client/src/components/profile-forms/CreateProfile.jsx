@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { createProfile } from '../../features/profile/profileSlice'
-import { removeAlert, setAlert } from '../../features/alert/alertSlice'
 
 function CreateProfile() {
 	const [formData, setFormData] = useState({

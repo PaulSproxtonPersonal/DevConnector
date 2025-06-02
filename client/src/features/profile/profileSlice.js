@@ -1,8 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import profileService from './profileService'
-import { setAlert } from '../alert/alertSlice'
-import { useDispatch } from 'react-redux'
-import { toast } from 'react-toastify'
 
 const initialState = {
 	profile: null,
@@ -40,10 +37,7 @@ export const createProfile = createAsyncThunk(
 	'profile/createProfile',
 	async (formData, thunkAPI) => {
 		try {
-			//const dispatch = useDispatch()
-			console.log('About the call createProfile')
 			const value = await profileService.createProfile(formData)
-			console.log('createProfile value:', value)
 			if (value._id !== undefined && value._id !== null) {
 				return value
 			} else {
@@ -57,8 +51,6 @@ export const createProfile = createAsyncThunk(
 					error.response.data.errors[0].msg) ||
 				error.message ||
 				error.toString()
-
-			//toast.error(message)
 
 			return thunkAPI.rejectWithValue(message)
 		}

@@ -26,12 +26,10 @@ const createProfile = async (formData) => {
 		}
 
 		const response = await axios.post('/api/profile', formData, config)
-		console.log('createProfile response:', response)
 
 		return response.data
 	} catch (error) {
 		const errors = error.response.data.errors
-		console.log('createProfile Errors: ', errors)
 		if (errors) {
 			errors.forEach((error) => toast.error(error.msg))
 		}
