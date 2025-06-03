@@ -40,9 +40,59 @@ const createProfile = async (formData) => {
 	}
 }
 
+const addExperience = async (formData) => {
+	try {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}
+
+		const response = await axios.put('/api/profile/experience', formData, config)
+
+		return response.data
+	} catch (error) {
+		const errors = error.response.data.errors
+		if (errors) {
+			errors.forEach((error) => toast.error(error.msg))
+		}
+
+		return {
+			msg: error.response.statusText,
+			status: error.response.status,
+		}
+	}
+}
+
+const addEducation = async (formData) => {
+	try {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}
+
+		const response = await axios.put('/api/profile/education', formData, config)
+
+		return response.data
+	} catch (error) {
+		const errors = error.response.data.errors
+		if (errors) {
+			errors.forEach((error) => toast.error(error.msg))
+		}
+
+		return {
+			msg: error.response.statusText,
+			status: error.response.status,
+		}
+	}
+}
+
 const profileService = {
 	getCurrentProfile,
 	createProfile,
+	addExperience,
+	addEducation,
 }
 
 export default profileService

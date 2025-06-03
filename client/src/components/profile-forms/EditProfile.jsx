@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { createProfile } from '../../features/profile/profileSlice'
+import { createProfile, getCurrentProfile } from '../../features/profile/profileSlice'
 import { toast } from 'react-toastify'
 
-function CreateProfile() {
+function EditProfile() {
 	const [formData, setFormData] = useState({
 		company: '',
 		website: '',
@@ -40,11 +40,30 @@ function CreateProfile() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
-	const { isSuccess } = useSelector((state) => state.profile)
+	const { isSuccess, profile, isLoading } = useSelector((state) => state.profile)
+
+	useEffect(() => {
+		//dispatch(getCurrentProfile())
+
+		setFormData({
+			company: isLoading || !profile.company ? '' : profile.company,
+			website: isLoading || !profile.website ? '' : profile.website,
+			location: isLoading || !profile.location ? '' : profile.location,
+			status: isLoading || !profile.status ? '' : profile.status,
+			skills: isLoading || !profile.skills ? '' : profile.skills.join(','),
+			githubusername: isLoading || !profile.githubusername ? '' : profile.githubusername,
+			bio: isLoading || !profile.bio ? '' : profile.bio,
+			twitter: isLoading || !profile.social ? '' : profile.social.twitter,
+			facebook: isLoading || !profile.social ? '' : profile.social.facebook,
+			linkedin: isLoading || !profile.social ? '' : profile.social.linkedin,
+			youtube: isLoading || !profile.social ? '' : profile.social.youtube,
+			instagram: isLoading || !profile.social ? '' : profile.social.instagram,
+		})
+	}, [isLoading])
 
 	useEffect(() => {
 		if (isSuccess) {
-			toast.success('Profile Created')
+			toast.success('Profile Edited')
 			navigate('/dashboard')
 		}
 	}, [isSuccess, navigate])
@@ -60,7 +79,7 @@ function CreateProfile() {
 
 	return (
 		<div className='container'>
-			<h1 className='large text-primary'>Create Your Profile</h1>
+			<h1 className='large text-primary'>Edit Your Profile</h1>
 			<p className='lead'>
 				<i className='fas fa-user'></i> Let's get some information to make your profile stand out
 			</p>
@@ -221,4 +240,4 @@ function CreateProfile() {
 	)
 }
 
-export default CreateProfile
+export default EditProfile

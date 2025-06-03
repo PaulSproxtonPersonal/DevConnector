@@ -11,6 +11,9 @@ import Register from './components/auth/Register'
 import Login from './components/auth/Login'
 import Dashboard from './components/dashboard/Dashboard'
 import CreateProfile from './components/profile-forms/CreateProfile'
+import EditProfile from './components/profile-forms/EditProfile'
+import AddExperience from './components/profile-forms/AddExperience'
+import AddEducation from './components/profile-forms/AddEducation'
 
 const App = () => {
 	const dispatch = useDispatch()
@@ -32,6 +35,15 @@ const App = () => {
 					</Route>
 					<Route exact path='/create-profile' element={<PrivateRoute />}>
 						<Route exact path='/create-profile' element={<CreateProfile />} />
+					</Route>
+					<Route exact path='/edit-profile' element={<PrivateRoute />}>
+						<Route exact path='/edit-profile' element={<EditProfile />} />
+					</Route>
+					<Route exact path='/add-experience' element={<PrivateRoute />}>
+						<Route exact path='/add-experience' element={<AddExperience />} />
+					</Route>
+					<Route exact path='/add-education' element={<PrivateRoute />}>
+						<Route exact path='/add-education' element={<AddEducation />} />
 					</Route>
 				</Routes>
 			</Router>

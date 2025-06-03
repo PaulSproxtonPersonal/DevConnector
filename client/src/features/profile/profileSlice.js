@@ -57,6 +57,51 @@ export const createProfile = createAsyncThunk(
 	}
 )
 
+export const addExperience = createAsyncThunk(
+	'profile/addExperience',
+	async (formData, thunkAPI) => {
+		try {
+			const value = await profileService.addExperience(formData)
+			if (value._id !== undefined && value._id !== null) {
+				return value
+			} else {
+				return thunkAPI.rejectWithValue(value)
+			}
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.errors &&
+					error.response.data.errors[0].msg) ||
+				error.message ||
+				error.toString()
+
+			return thunkAPI.rejectWithValue(message)
+		}
+	}
+)
+
+export const addEducation = createAsyncThunk('profile/addEducation', async (formData, thunkAPI) => {
+	try {
+		const value = await profileService.addEducation(formData)
+		if (value._id !== undefined && value._id !== null) {
+			return value
+		} else {
+			return thunkAPI.rejectWithValue(value)
+		}
+	} catch (error) {
+		const message =
+			(error.response &&
+				error.response.data &&
+				error.response.data.errors &&
+				error.response.data.errors[0].msg) ||
+			error.message ||
+			error.toString()
+
+		return thunkAPI.rejectWithValue(message)
+	}
+})
+
 export const clearProfile = createAsyncThunk('profile/clearProfile', async () => {
 	await profileService.clearProfile()
 })
@@ -81,7 +126,7 @@ export const profileSlice = createSlice({
 			})
 			.addCase(getCurrentProfile.fulfilled, (state, action) => {
 				state.isLoading = false
-				state.isSuccess = true
+				state.isSuccess = false
 				state.profile = action.payload
 			})
 			.addCase(getCurrentProfile.rejected, (state, action) => {
@@ -99,6 +144,34 @@ export const profileSlice = createSlice({
 				state.profile = action.payload
 			})
 			.addCase(createProfile.rejected, (state, action) => {
+				state.isLoading = false
+				state.isError = true
+				state.profile = null
+				state.message = action.payload
+			})
+			.addCase(addExperience.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(addExperience.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+				state.profile = action.payload
+			})
+			.addCase(addExperience.rejected, (state, action) => {
+				state.isLoading = false
+				state.isError = true
+				state.profile = null
+				state.message = action.payload
+			})
+			.addCase(addEducation.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(addEducation.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+				state.profile = action.payload
+			})
+			.addCase(addEducation.rejected, (state, action) => {
 				state.isLoading = false
 				state.isError = true
 				state.profile = null
