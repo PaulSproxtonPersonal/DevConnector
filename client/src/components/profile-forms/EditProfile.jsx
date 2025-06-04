@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { createProfile, getCurrentProfile } from '../../features/profile/profileSlice'
+import { createProfile } from '../../features/profile/profileSlice'
 import { toast } from 'react-toastify'
 
 function EditProfile() {
@@ -43,8 +43,6 @@ function EditProfile() {
 	const { isSuccess, profile, isLoading } = useSelector((state) => state.profile)
 
 	useEffect(() => {
-		//dispatch(getCurrentProfile())
-
 		setFormData({
 			company: isLoading || !profile.company ? '' : profile.company,
 			website: isLoading || !profile.website ? '' : profile.website,
@@ -59,7 +57,21 @@ function EditProfile() {
 			youtube: isLoading || !profile.social ? '' : profile.social.youtube,
 			instagram: isLoading || !profile.social ? '' : profile.social.instagram,
 		})
-	}, [isLoading])
+	}, [
+		isLoading,
+		profile.company,
+		profile.website,
+		profile.location,
+		profile.status,
+		profile.skills,
+		profile.githubusername,
+		profile.bio,
+		profile.twitter,
+		profile.facebook,
+		profile.linkedin,
+		profile.youtube,
+		profile.instagram,
+	])
 
 	useEffect(() => {
 		if (isSuccess) {
