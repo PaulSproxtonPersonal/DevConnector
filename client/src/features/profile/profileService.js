@@ -40,6 +40,7 @@ const createProfile = async (formData) => {
 	}
 }
 
+// Add an Experience
 const addExperience = async (formData) => {
 	try {
 		const config = {
@@ -55,15 +56,20 @@ const addExperience = async (formData) => {
 		const errors = error.response.data.errors
 		if (errors) {
 			errors.forEach((error) => toast.error(error.msg))
-		}
-
-		return {
-			msg: error.response.statusText,
-			status: error.response.status,
+		} else {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.errors &&
+					error.response.data.errors[0].msg) ||
+				error.message ||
+				error.toString()
+			toast.error(message)
 		}
 	}
 }
 
+// Add an Education
 const addEducation = async (formData) => {
 	try {
 		const config = {
@@ -79,6 +85,40 @@ const addEducation = async (formData) => {
 		const errors = error.response.data.errors
 		if (errors) {
 			errors.forEach((error) => toast.error(error.msg))
+		} else {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.errors &&
+					error.response.data.errors[0].msg) ||
+				error.message ||
+				error.toString()
+			toast.error(message)
+		}
+	}
+}
+
+// Delete an Experience
+const deleteExperience = async (id) => {
+	try {
+		const response = await axios.delete(`/api/profile/experience/${id}`)
+
+		toast.success('Experience has been deleted')
+
+		return response.data
+	} catch (error) {
+		const errors = error.response.data.errors
+		if (errors) {
+			errors.forEach((error) => toast.error(error.msg))
+		} else {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.errors &&
+					error.response.data.errors[0].msg) ||
+				error.message ||
+				error.toString()
+			toast.error(message)
 		}
 
 		return {
@@ -88,11 +128,62 @@ const addEducation = async (formData) => {
 	}
 }
 
+// Delete an Education
+const deleteEducation = async (id) => {
+	try {
+		const response = await axios.delete(`/api/profile/education/${id}`)
+
+		toast.success('Education has been deleted')
+
+		return response.data
+	} catch (error) {
+		const errors = error.response.data.errors
+		if (errors) {
+			errors.forEach((error) => toast.error(error.msg))
+		} else {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.errors &&
+					error.response.data.errors[0].msg) ||
+				error.message ||
+				error.toString()
+			toast.error(message)
+		}
+	}
+}
+
+// Delete Account
+const deleteAccount = async () => {
+	if (window.confirm('Are you sure?  This cannot be undone!!')) {
+		try {
+			const response = await axios.delete(`/api/profile`)
+
+			toast.success('Account has been deleted')
+
+			return response.data
+		} catch (error) {
+			const errors = error.response.data.errors
+			if (errors) {
+				errors.forEach((error) => toast.error(error.msg))
+			}
+
+			return {
+				msg: error.response.statusText,
+				status: error.response.status,
+			}
+		}
+	}
+}
+
 const profileService = {
 	getCurrentProfile,
 	createProfile,
 	addExperience,
 	addEducation,
+	deleteExperience,
+	deleteEducation,
+	deleteAccount,
 }
 
 export default profileService

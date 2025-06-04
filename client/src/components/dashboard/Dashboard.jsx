@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getCurrentProfile } from '../../features/profile/profileSlice'
+import { getCurrentProfile, deleteAccount } from '../../features/profile/profileSlice'
+import { logout } from '../../features/auth/authSlice'
 import Spinner from '../layout/Spinner'
 import { Link } from 'react-router-dom'
 import DashboardActions from './DashboardActions'
@@ -17,6 +18,11 @@ function Dashboard() {
 		dispatch(getCurrentProfile())
 	}, [])
 
+	const deleteMyAccount = () => {
+		dispatch(deleteAccount())
+		dispatch(logout())
+	}
+
 	return isLoading && profile === null ? (
 		<Spinner />
 	) : (
@@ -31,6 +37,12 @@ function Dashboard() {
 						<DashboardActions />
 						<Experience experience={profile.experience} />
 						<Education education={profile.education} />
+
+						<div className='my-2'>
+							<button className='btn btn-danger' onClick={() => deleteMyAccount()}>
+								<i className='fas fa-user-minus'> Delete My Account</i>
+							</button>
+						</div>
 					</>
 				) : (
 					<>

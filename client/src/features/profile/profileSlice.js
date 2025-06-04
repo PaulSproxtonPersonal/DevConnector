@@ -102,6 +102,72 @@ export const addEducation = createAsyncThunk('profile/addEducation', async (form
 	}
 })
 
+export const deleteExperience = createAsyncThunk(
+	'profile/deleteExperience',
+	async (id, thunkAPI) => {
+		try {
+			const value = await profileService.deleteExperience(id)
+			if (value._id !== undefined && value._id !== null) {
+				return value
+			} else {
+				return thunkAPI.rejectWithValue(value)
+			}
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.errors &&
+					error.response.data.errors[0].msg) ||
+				error.message ||
+				error.toString()
+
+			return thunkAPI.rejectWithValue(message)
+		}
+	}
+)
+
+export const deleteEducation = createAsyncThunk('profile/deleteEducation', async (id, thunkAPI) => {
+	try {
+		const value = await profileService.deleteEducation(id)
+		if (value._id !== undefined && value._id !== null) {
+			return value
+		} else {
+			return thunkAPI.rejectWithValue(value)
+		}
+	} catch (error) {
+		const message =
+			(error.response &&
+				error.response.data &&
+				error.response.data.errors &&
+				error.response.data.errors[0].msg) ||
+			error.message ||
+			error.toString()
+
+		return thunkAPI.rejectWithValue(message)
+	}
+})
+
+export const deleteAccount = createAsyncThunk('profile/deleteAccount', async (thunkAPI) => {
+	try {
+		const value = await profileService.deleteAccount()
+		if (value._id !== undefined && value._id !== null) {
+			return value
+		} else {
+			return thunkAPI.rejectWithValue(value)
+		}
+	} catch (error) {
+		const message =
+			(error.response &&
+				error.response.data &&
+				error.response.data.errors &&
+				error.response.data.errors[0].msg) ||
+			error.message ||
+			error.toString()
+
+		return thunkAPI.rejectWithValue(message)
+	}
+})
+
 export const clearProfile = createAsyncThunk('profile/clearProfile', async () => {
 	await profileService.clearProfile()
 })
@@ -159,8 +225,6 @@ export const profileSlice = createSlice({
 			})
 			.addCase(addExperience.rejected, (state, action) => {
 				state.isLoading = false
-				state.isError = true
-				state.profile = null
 				state.message = action.payload
 			})
 			.addCase(addEducation.pending, (state) => {
@@ -172,6 +236,37 @@ export const profileSlice = createSlice({
 				state.profile = action.payload
 			})
 			.addCase(addEducation.rejected, (state, action) => {
+				state.isLoading = false
+				state.isError = true
+				state.profile = null
+				state.message = action.payload
+			})
+			.addCase(deleteExperience.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+				state.profile = action.payload
+			})
+			.addCase(deleteExperience.rejected, (state, action) => {
+				state.isLoading = false
+				state.isError = true
+				state.message = action.payload
+			})
+			.addCase(deleteEducation.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+				state.profile = action.payload
+			})
+			.addCase(deleteEducation.rejected, (state, action) => {
+				state.isLoading = false
+				state.isError = true
+				state.message = action.payload
+			})
+			.addCase(deleteAccount.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+				state.profile = null
+			})
+			.addCase(deleteAccount.rejected, (state, action) => {
 				state.isLoading = false
 				state.isError = true
 				state.profile = null

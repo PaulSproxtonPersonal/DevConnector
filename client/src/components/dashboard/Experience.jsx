@@ -1,6 +1,10 @@
 import Moment from 'react-moment'
+import { deleteExperience } from '../../features/profile/profileSlice'
+import { useDispatch } from 'react-redux'
 
 function Experience({ experience }) {
+	const dispatch = useDispatch()
+
 	const experiences = experience.map((exp) => (
 		<tr key={exp._id}>
 			<td>{exp.company}</td>
@@ -10,7 +14,9 @@ function Experience({ experience }) {
 				{exp.to === null ? ' Now' : <Moment format='YYYY/MM/DD'>{exp.to}</Moment>}
 			</td>
 			<td>
-				<button className='btn btn-danger'>Delete</button>
+				<button className='btn btn-danger' onClick={() => dispatch(deleteExperience(exp._id))}>
+					Delete
+				</button>
 			</td>
 		</tr>
 	))
