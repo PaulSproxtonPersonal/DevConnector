@@ -16,7 +16,7 @@ function Dashboard() {
 
 	useEffect(() => {
 		dispatch(getCurrentProfile())
-	}, [])
+	}, [dispatch])
 
 	const deleteMyAccount = () => {
 		dispatch(deleteAccount())

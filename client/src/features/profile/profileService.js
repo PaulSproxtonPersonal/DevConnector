@@ -16,6 +16,50 @@ const getCurrentProfile = async () => {
 	}
 }
 
+// Get all profiles
+const getProfiles = async () => {
+	try {
+		const response = await axios.get('/api/profile')
+		return response.data
+	} catch (error) {
+		console.log('Error:  ', error)
+		return {
+			msg: error.response.statusText,
+			status: error.response.status,
+		}
+	}
+}
+
+// Get profile by Id
+const getProfileById = async (userId) => {
+	try {
+		const response = await axios.get(`/api/profile/user/${userId}`)
+
+		return response.data
+	} catch (error) {
+		console.log('Error:  ', error)
+		return {
+			msg: error.response.statusText,
+			status: error.response.status,
+		}
+	}
+}
+
+// Get Github repos
+const getGithubRepos = async (username) => {
+	try {
+		const response = await axios.get(`/api/profile/github/${username}`)
+
+		return response.data
+	} catch (error) {
+		console.log('Error:  ', error)
+		return {
+			msg: error.response.statusText,
+			status: error.response.status,
+		}
+	}
+}
+
 // Create or update profile
 const createProfile = async (formData) => {
 	try {
@@ -178,6 +222,9 @@ const deleteAccount = async () => {
 
 const profileService = {
 	getCurrentProfile,
+	getProfiles,
+	getProfileById,
+	getGithubRepos,
 	createProfile,
 	addExperience,
 	addEducation,

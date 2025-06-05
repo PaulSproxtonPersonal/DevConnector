@@ -33,6 +33,78 @@ export const getCurrentProfile = createAsyncThunk('profile/getCurrentProfile', a
 	}
 })
 
+export const getProfiles = createAsyncThunk('profile/getProfiles', async (thunkAPI) => {
+	try {
+		let value = await profileService.getProfiles()
+		if (value !== undefined && value !== null) {
+			return value
+		} else {
+			// The Profile was not successfully returned
+			return thunkAPI.rejectWithValue('The profiles could not be retrieved')
+		}
+	} catch (error) {
+		const message =
+			(error.response &&
+				error.response.data &&
+				error.response.data.errors &&
+				error.response.data.errors[0].msg) ||
+			error.message ||
+			error.toString()
+
+		return thunkAPI.rejectWithValue(message)
+	}
+})
+
+export const getProfileById = createAsyncThunk(
+	'profile/getProfileById',
+	async (userId, thunkAPI) => {
+		try {
+			let value = await profileService.getProfileById(userId)
+			if (value._id !== undefined && value._id !== null) {
+				return value
+			} else {
+				// The Profile was not successfully returned
+				return thunkAPI.rejectWithValue('The profile could not be retrieved')
+			}
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.errors &&
+					error.response.data.errors[0].msg) ||
+				error.message ||
+				error.toString()
+
+			return thunkAPI.rejectWithValue(message)
+		}
+	}
+)
+
+export const getGithubRepos = createAsyncThunk(
+	'profile/getGithubRepos',
+	async (username, thunkAPI) => {
+		try {
+			let value = await profileService.getGithubRepos(username)
+			if (value._id !== undefined && value._id !== null) {
+				return value
+			} else {
+				// The Profile was not successfully returned
+				return thunkAPI.rejectWithValue('The Github repos could not be retrieved')
+			}
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.errors &&
+					error.response.data.errors[0].msg) ||
+				error.message ||
+				error.toString()
+
+			return thunkAPI.rejectWithValue(message)
+		}
+	}
+)
+
 export const createProfile = createAsyncThunk(
 	'profile/createProfile',
 	async (formData, thunkAPI) => {
@@ -199,6 +271,48 @@ export const profileSlice = createSlice({
 				state.isLoading = false
 				state.isError = true
 				state.profile = null
+				state.message = action.payload
+			})
+			.addCase(getProfiles.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(getProfiles.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+				state.profiles = action.payload
+			})
+			.addCase(getProfiles.rejected, (state, action) => {
+				state.isLoading = false
+				state.isError = true
+				state.profiles = null
+				state.message = action.payload
+			})
+			.addCase(getProfileById.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(getProfileById.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = false
+				state.profile = action.payload
+			})
+			.addCase(getProfileById.rejected, (state, action) => {
+				state.isLoading = false
+				state.isError = true
+				state.profile = null
+				state.message = action.payload
+			})
+			.addCase(getGithubRepos.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(getGithubRepos.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+				state.repos = action.payload
+			})
+			.addCase(getGithubRepos.rejected, (state, action) => {
+				state.isLoading = false
+				state.isError = true
+				state.repos = null
 				state.message = action.payload
 			})
 			.addCase(createProfile.pending, (state) => {

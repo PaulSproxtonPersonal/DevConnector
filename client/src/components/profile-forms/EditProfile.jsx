@@ -57,21 +57,7 @@ function EditProfile() {
 			youtube: isLoading || !profile.social ? '' : profile.social.youtube,
 			instagram: isLoading || !profile.social ? '' : profile.social.instagram,
 		})
-	}, [
-		isLoading,
-		profile.company,
-		profile.website,
-		profile.location,
-		profile.status,
-		profile.skills,
-		profile.githubusername,
-		profile.bio,
-		profile.twitter,
-		profile.facebook,
-		profile.linkedin,
-		profile.youtube,
-		profile.instagram,
-	])
+	}, [isLoading])
 
 	useEffect(() => {
 		if (isSuccess) {
@@ -103,6 +89,7 @@ function EditProfile() {
 						<option value='Developer'>Developer</option>
 						<option value='Junior Developer'>Junior Developer</option>
 						<option value='Senior Developer'>Senior Developer</option>
+						<option value='Director'>Director</option>
 						<option value='Manager'>Manager</option>
 						<option value='Student or Learning'>Student or Learning</option>
 						<option value='Instructor'>Instructor or Teacher</option>
