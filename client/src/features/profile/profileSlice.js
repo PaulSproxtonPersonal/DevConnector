@@ -6,6 +6,7 @@ const initialState = {
 	profiles: [],
 	repos: [],
 	isLoading: true,
+	isGithubLoading: false,
 	isError: false,
 	isSuccess: false,
 	message: '',
@@ -85,7 +86,7 @@ export const getGithubRepos = createAsyncThunk(
 	async (username, thunkAPI) => {
 		try {
 			let value = await profileService.getGithubRepos(username)
-			if (value._id !== undefined && value._id !== null) {
+			if (value.msg === undefined || value.msg === null) {
 				return value
 			} else {
 				// The Profile was not successfully returned
@@ -293,26 +294,28 @@ export const profileSlice = createSlice({
 			.addCase(getProfileById.fulfilled, (state, action) => {
 				state.isLoading = false
 				state.isSuccess = false
+				state.repos = []
 				state.profile = action.payload
 			})
 			.addCase(getProfileById.rejected, (state, action) => {
 				state.isLoading = false
 				state.isError = true
 				state.profile = null
+				state.repos = []
 				state.message = action.payload
 			})
 			.addCase(getGithubRepos.pending, (state) => {
-				state.isLoading = true
+				state.isGithubLoading = true
 			})
 			.addCase(getGithubRepos.fulfilled, (state, action) => {
-				state.isLoading = false
-				state.isSuccess = true
+				state.isGithubLoading = false
+				//state.isSuccess = true
 				state.repos = action.payload
 			})
 			.addCase(getGithubRepos.rejected, (state, action) => {
-				state.isLoading = false
+				state.isGithubLoading = false
 				state.isError = true
-				state.repos = null
+				state.repos = []
 				state.message = action.payload
 			})
 			.addCase(createProfile.pending, (state) => {

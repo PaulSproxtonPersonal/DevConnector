@@ -52,7 +52,7 @@ const getGithubRepos = async (username) => {
 
 		return response.data
 	} catch (error) {
-		console.log('Error:  ', error)
+		console.log('Github Error:  ', error)
 		return {
 			msg: error.response.statusText,
 			status: error.response.status,
