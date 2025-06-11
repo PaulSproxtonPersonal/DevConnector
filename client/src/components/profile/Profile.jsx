@@ -18,11 +18,7 @@ function Profile() {
 	const { isAuthenticated, isLoading: isAuthLoading, user } = useSelector((state) => state.auth)
 
 	useEffect(() => {
-		console.log('Calling getProfileById')
 		dispatch(getProfileById(params.id))
-		// if (profile.githubusername) {
-		// 	dispatch(getGithubRepos(profile.githubusername))
-		// }
 	}, [dispatch, params.id])
 
 	return (
