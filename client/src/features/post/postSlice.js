@@ -10,14 +10,37 @@ const initialState = {
 	message: '',
 }
 
-export const getPosts = createAsyncThunk('post/getPost', async (thunkAPI) => {
+export const getPosts = createAsyncThunk('post/getPosts', async (thunkAPI) => {
 	try {
 		let value = await postService.getPosts()
 		if (value.msg === undefined || value.msg === null) {
 			return value
 		} else {
 			// The Profile was not successfully returned
-			return thunkAPI.rejectWithValue('The profile could not be retrieved')
+			return thunkAPI.rejectWithValue('The posts could not be retrieved')
+		}
+	} catch (error) {
+		console.log('Get posts error:', error)
+		const message =
+			(error.response &&
+				error.response.data &&
+				error.response.data.errors &&
+				error.response.data.errors[0].msg) ||
+			error.message ||
+			error.toString()
+
+		return thunkAPI.rejectWithValue(message)
+	}
+})
+
+export const getPost = createAsyncThunk('post/getPost', async (postId, thunkAPI) => {
+	try {
+		let value = await postService.getPost(postId)
+		if (value.msg === undefined || value.msg === null) {
+			return value
+		} else {
+			// The Profile was not successfully returned
+			return thunkAPI.rejectWithValue('The post could not be retrieved')
 		}
 	} catch (error) {
 		console.log('Get posts error:', error)
@@ -125,6 +148,52 @@ export const addPost = createAsyncThunk('/post/addPost', async (formData, thunkA
 	}
 })
 
+export const addComment = createAsyncThunk('/post/addComment', async (comment, thunkAPI) => {
+	try {
+		let value = await postService.addComment(comment.postId, comment.text)
+		if (value.msg === undefined || value.msg === null) {
+			return value
+		} else {
+			// The Profile was not successfully returned
+			return thunkAPI.rejectWithValue('The comment could not be added')
+		}
+	} catch (error) {
+		console.log('Add comment error:', error)
+		const message =
+			(error.response &&
+				error.response.data &&
+				error.response.data.errors &&
+				error.response.data.errors[0].msg) ||
+			error.message ||
+			error.toString()
+
+		return thunkAPI.rejectWithValue(message)
+	}
+})
+
+export const deleteComment = createAsyncThunk('/post/deleteComment', async (comment, thunkAPI) => {
+	try {
+		let value = await postService.deleteComment(comment.postId, comment.commentId)
+		if (value.msg === undefined || value.msg === null) {
+			return value
+		} else {
+			// The Profile was not successfully returned
+			return thunkAPI.rejectWithValue('The comment could not be deleted')
+		}
+	} catch (error) {
+		console.log('Delete comment error:', error)
+		const message =
+			(error.response &&
+				error.response.data &&
+				error.response.data.errors &&
+				error.response.data.errors[0].msg) ||
+			error.message ||
+			error.toString()
+
+		return thunkAPI.rejectWithValue(message)
+	}
+})
+
 export const postSlice = createSlice({
 	name: 'post',
 	initialState,
@@ -152,6 +221,21 @@ export const postSlice = createSlice({
 				state.isLoading = false
 				state.isError = true
 				state.posts = []
+				state.message = action.payload
+			})
+			.addCase(getPost.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(getPost.fulfilled, (state, action) => {
+				state.isSuccess = true
+				state.isLoading = false
+				state.post = action.payload
+			})
+			.addCase(getPost.rejected, (state, action) => {
+				state.isSuccess = false
+				state.isLoading = false
+				state.isError = true
+				state.post = null
 				state.message = action.payload
 			})
 			.addCase(addLike.pending, (state) => {
@@ -212,6 +296,38 @@ export const postSlice = createSlice({
 				state.posts = [action.payload, ...state.posts]
 			})
 			.addCase(addPost.rejected, (state, action) => {
+				state.isError = true
+				state.isSuccess = false
+				state.isLoading = false
+				state.message = action.payload
+			})
+			.addCase(addComment.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(addComment.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+				state.isError = false
+				state.post.comments = action.payload
+			})
+			.addCase(addComment.rejected, (state, action) => {
+				state.isError = true
+				state.isSuccess = false
+				state.isLoading = false
+				state.message = action.payload
+			})
+			.addCase(deleteComment.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(deleteComment.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+				state.isError = false
+				state.post.comments = state.post.comments.filter(
+					(comment) => comment._id !== action.payload
+				)
+			})
+			.addCase(deleteComment.rejected, (state, action) => {
 				state.isError = true
 				state.isSuccess = false
 				state.isLoading = false
